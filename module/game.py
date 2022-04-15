@@ -28,8 +28,7 @@ class Game:
         self.paddleB.rect.y = 20
         
         self.ball = Ball(WHITE,10,10)
-        self.ball.rect.x = 345
-        self.ball.rect.y = 195
+        
         
         #This will be a list that will contain all the sprites we intend to use in our game.
         self.all_sprites_list = pygame.sprite.Group()
@@ -53,6 +52,10 @@ class Game:
                 
         # -------- Main Program Loop -----------
         while self.carryOn:
+
+            
+            
+
             # --- Main event loop
             for event in pygame.event.get(): # User did something
                 if event.type == pygame.QUIT: # If user clicked close
@@ -63,18 +66,39 @@ class Game:
         
             #Moving the paddles when the use uses the arrow keys (player A) or "W/S" keys (player B) 
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_w]:
-                self.paddleA.moveUp(5)
-            if keys[pygame.K_s]:
-                self.paddleA.moveDown(5)
+            if self.net.id == "0":
+                if keys[pygame.K_UP]:
+                    self.paddleA.moveUp(5)
+                if keys[pygame.K_DOWN]:
+                    self.paddleA.moveDown(5)
+            if self.net.id == "1":
+                if keys[pygame.K_UP]:
+                    self.paddleB.moveUp(5)
+                if keys[pygame.K_DOWN]:
+                    self.paddleB.moveDown(5)
+
             # if keys[pygame.K_UP]:
             #     self.paddleB.moveUp(5)
             # if keys[pygame.K_DOWN]:
             #     self.paddleB.moveDown(5)
 
             # --- Game logic should go here
-            self.paddleB.rect.x, self.paddleB.rect.y = self.parse_data(self.send_data())
 
+            # if self.net.id == "0":
+            #     self.paddleA.rect.x, self.paddleA.rect.y, self.ball.rect.x, self.ball.rect.y = self.parse_data(self.send_data())
+            # else:
+            self.paddleB.rect.x, y, self.ball.rect.x, self.ball.rect.y = self.parse_data(self.send_data())
+
+
+            if self.net.id == "0":
+                print(y)
+                self.paddleB.rect.y = y
+
+            if self.net.id == "1":
+                print(y)
+                self.paddleA.rect.y = y
+
+            
 
             self.all_sprites_list.update()
             
@@ -125,10 +149,12 @@ class Game:
         Send position to server
         :return: None
         """
-        if self.net.id==0:
-            data = str(self.net.id) + ":" + str(20) + "," + str(self.paddleA.rect.y)
+        if self.net.id=="0":
+            print(0)
+            data = str(self.net.id) + ":" + str(670) + "," + str(self.paddleA.rect.y)+","+str(self.ball.rect.x)+","+str(self.ball.rect.y)
         else:
-            data = str(self.net.id) + ":" + str(670) + "," + str(self.paddleA.rect.y)
+            print(1)
+            data = str(self.net.id) + ":" + str(670) + "," + str(self.paddleB.rect.y)+","+str(self.ball.rect.x)+","+str(self.ball.rect.y)
 
         reply = self.net.send(data)
         return reply
@@ -137,7 +163,7 @@ class Game:
     def parse_data(data):
         try:
             d = data.split(":")[1].split(",")
-            return int(d[0]), int(d[1])
+            return int(d[0]), int(d[1]), int(d[2]), int(d[3])
         except:
             return 0,0
 

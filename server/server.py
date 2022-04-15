@@ -1,10 +1,11 @@
 import socket
 from _thread import *
 import sys
+import threading
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server = 'localhost'
+server = socket.gethostname()
 port = 5555
 
 server_ip = socket.gethostbyname(server)
@@ -18,13 +19,23 @@ except socket.error as e:
 s.listen(2)
 print("Waiting for a connection")
 
+
+threads = []
+
 currentId = "0"
-pos = ["0:20,200", "1:670,200"]
+pos = ["0:20,200", "1:670,200", ",120,120"]
 def threaded_client(conn):
+    
+    threads.append(threading.get_ident())
+
     global currentId, pos
     conn.send(str.encode(currentId))
     currentId = "1"
     reply = ''
+
+    while len(threads)<2:
+        pass
+
     while True:
         try:
             data = conn.recv(2048)
@@ -36,12 +47,15 @@ def threaded_client(conn):
                 print("Recieved: " + reply)
                 arr = reply.split(":")
                 id = int(arr[0])
-                pos[id] = reply
+                pos[id] = str(id)+":"+",".join(reply.split(":")[1].split(",")[:2])
+                pos[2] = ","+",".join(reply.split(":")[1].split(",")[2:])
 
                 if id == 0: nid = 1
                 if id == 1: nid = 0
 
                 reply = pos[nid][:]
+                reply += pos[2]
+                
                 print("Sending: " + reply)
             print(reply)
             conn.sendall(str.encode(reply))
