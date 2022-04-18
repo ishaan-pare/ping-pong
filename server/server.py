@@ -5,7 +5,7 @@ import threading
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-server = socket.gethostname()
+server = 'localhost'
 port = 5555
 
 server_ip = socket.gethostbyname(server)
@@ -23,7 +23,7 @@ print("Waiting for a connection")
 threads = []
 
 currentId = "0"
-pos = ["0:20,200", "1:670,200", ",120,120"]
+pos = ["0:20,200", "1:670,200", ",200,200"]
 def threaded_client(conn):
     
     threads.append(threading.get_ident())
@@ -50,6 +50,8 @@ def threaded_client(conn):
                 pos[id] = str(id)+":"+",".join(reply.split(":")[1].split(",")[:2])
                 pos[2] = ","+",".join(reply.split(":")[1].split(",")[2:])
 
+                print(pos[2])
+                
                 if id == 0: nid = 1
                 if id == 1: nid = 0
 

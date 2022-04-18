@@ -21,11 +21,11 @@ class Game:
         
         self.paddleA = Paddle(WHITE, 10, 100)
         self.paddleA.rect.x = 20
-        self.paddleA.rect.y = 20
+        self.paddleA.rect.y = 200
 
         self.paddleB = Paddle(WHITE, 10, 100)
         self.paddleB.rect.x = 670
-        self.paddleB.rect.y = 20
+        self.paddleB.rect.y = 200
         
         self.ball = Ball(WHITE,10,10)
         
