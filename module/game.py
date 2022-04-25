@@ -4,8 +4,11 @@ from ball import Ball
 from network import Network
 
 
-BLACK = (0,0,0)
-WHITE = (255,255,255)
+BLACK = (255,255,255)
+WHITE = (0,0,0)
+RED = (255,0,0)
+BLUE = (0,0,255)
+YELLOW = (0,128,0)
 
 class Game:
     # Define some colors
@@ -19,15 +22,15 @@ class Game:
         self.screen = pygame.display.set_mode(size)
         pygame.display.set_caption("Pong")
         
-        self.paddleA = Paddle(WHITE, 10, 100)
+        self.paddleA = Paddle(BLUE, 10, 100)
         self.paddleA.rect.x = 20
         self.paddleA.rect.y = 200
 
-        self.paddleB = Paddle(WHITE, 10, 100)
+        self.paddleB = Paddle(RED, 10, 100)
         self.paddleB.rect.x = 670
         self.paddleB.rect.y = 200
         
-        self.ball = Ball(WHITE,10,10)
+        self.ball = Ball(YELLOW,10,10)
         
         
         #This will be a list that will contain all the sprites we intend to use in our game.

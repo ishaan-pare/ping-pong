@@ -2,7 +2,7 @@ import pygame
 from random import randint
 import time
 
-BLACK = (0, 0, 0)
+BLACK = (0, 255, 0)
  
 class Ball(pygame.sprite.Sprite):
     
